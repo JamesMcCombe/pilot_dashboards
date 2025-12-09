@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PilotScore Histogram – High-Harm Zone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --primary: #1f4f87;
+      --accent: #2f80ff;
+      --danger: rgba(239, 68, 68, 0.18);
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-soft: #d1d5db;
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e3f2ff 0, #f5f7fb 50%, #eef1f7 100%);
+      color: var(--text-main);
+    }
+
+    .shell {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 20px 24px 24px;
+    }
+
+    .title {
+      margin: 0 0 4px;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .chart-shell {
+      position: relative;
+      margin-top: 12px;
+      padding: 36px 40px 46px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      background: #f9fafb;
+      overflow: hidden;
+    }
+
+    /* High-harm zone background band (0–40) */
+    .harm-band {
+      position: absolute;
+      left: 40px;         /* match padding-left */
+      top: 30px;
+      bottom: 40px;
+      width: 30%;         /* approx 0–40 on 0–100 scale */
+      background: var(--danger);
+      border-radius: 10px;
+      z-index: 0;
+    }
+
+    .axis-y-label {
+      position: absolute;
+      top: 10px;
+      left: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .axis-x-label {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .chart-inner {
+      position: relative;
+      z-index: 1;
+      height: 260px;
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .bar {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .bar-rect {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: var(--accent);
+      box-shadow: 0 4px 10px rgba(47, 128, 255, 0.25);
+    }
+
+    /* mock heights as percentages of chart height */
+    .h-80 { height: 80%; }
+    .h-70 { height: 70%; }
+    .h-60 { height: 60%; }
+    .h-55 { height: 55%; }
+    .h-45 { height: 45%; }
+    .h-40 { height: 40%; }
+    .h-35 { height: 35%; }
+    .h-25 { height: 25%; }
+    .h-20 { height: 20%; }
+    .h-15 { height: 15%; }
+
+    .x-ticks {
+      position: absolute;
+      bottom: 26px;
+      left: 40px;
+      right: 40px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .harm-label {
+      position: absolute;
+      left: 50px;
+      top: 32px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #b91c1c;
+    }
+
+    .legend {
+      margin-top: 10px;
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 8px;
+      border-radius: 999px;
+    }
+
+    .swatch-harm { background: var(--danger); border: 1px solid #fecaca; }
+    .swatch-normal { background: var(--accent); }
+
+    @media (max-width: 720px) {
+      .card { padding: 16px; }
+      .chart-shell { padding: 32px 26px 40px; }
+      .harm-band { left: 26px; }
+      .axis-y-label { left: 4px; }
+      .x-ticks { left: 26px; right: 26px; }
+      .harm-label { left: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <h1 class="title">PilotScore Distribution – NZ Sample (Mock Data)</h1>
+      <p class="subtitle">
+        Histogram of PilotScore with a highlighted low-score <strong>“High-Harm Zone”</strong> (0–40).
+      </p>
+
+      <div class="chart-shell">
+        <div class="harm-band"></div>
+        <div class="axis-y-label">Number of traders</div>
+        <div class="axis-x-label">PilotScore (0–100)</div>
+        <div class="harm-label">High-Harm Zone</div>
+
+        <div class="chart-inner">
+          <!-- 10 bins: 0–10, 10–20, ..., 90–100 -->
+          <div class="bar"><div class="bar-rect h-80"></div></div>
+          <div class="bar"><div class="bar-rect h-70"></div></div>
+          <div class="bar"><div class="bar-rect h-60"></div></div>
+          <div class="bar"><div class="bar-rect h-55"></div></div>
+          <div class="bar"><div class="bar-rect h-45"></div></div>
+          <div class="bar"><div class="bar-rect h-40"></div></div>
+          <div class="bar"><div class="bar-rect h-35"></div></div>
+          <div class="bar"><div class="bar-rect h-25"></div></div>
+          <div class="bar"><div class="bar-rect h-20"></div></div>
+          <div class="bar"><div class="bar-rect h-15"></div></div>
+        </div>
+
+        <div class="x-ticks">
+          <span>0</span>
+          <span>20</span>
+          <span>40</span>
+          <span>60</span>
+          <span>80</span>
+          <span>100</span>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-swatch swatch-harm"></span>
+          <span>High-Harm behavioural zone (scores 0–40)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch swatch-normal"></span>
+          <span>Distribution of PilotScores across NZ traders (mock)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Slide 03 – Two Statements We Ask the FMA to Endorse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --primary: #1f4f87;
+      --accent: #18a0fb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-soft: #dde3f0;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #e3f2ff 0, #f5f7fb 50%, #eef1f7 100%);
+      color: var(--text-main);
+    }
+
+    .slide {
+      max-width: 1440px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 32px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148,163,184,0.16);
+      padding: 28px 32px 20px;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* HEADER */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      min-height: 10%;
+    }
+
+    .slide-title-block { display: flex; flex-direction: column; gap: 6px; }
+
+    .slide-kicker {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .slide-title {
+      font-size: 24px;
+      line-height: 1.3;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+      max-width: 720px;
+    }
+
+    .slide-number {
+      min-width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: linear-gradient(145deg, var(--primary), var(--accent));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      box-shadow: 0 0 0 4px rgba(24,160,251,0.18);
+    }
+
+    /* BODY */
+    .slide-body {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .col { display: flex; flex-direction: column; gap: 16px; }
+
+    .statement-box {
+      border: 1px solid rgba(148,163,184,0.5);
+      border-radius: 18px;
+      padding: 14px 18px;
+      background: #f8fafc;
+      font-size: 15px;
+      line-height: 1.45;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .statement-title {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .callout {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: -4px;
+    }
+
+    .visual-card {
+      flex: 1;
+      border: 1px dashed var(--border-soft);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg,#f8fafc,#eef2ff);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .visual-label {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .visual-placeholder {
+      flex: 1;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(148,163,184,0.12),
+        rgba(148,163,184,0.12) 6px,
+        rgba(148,163,184,0.04) 6px,
+        rgba(148,163,184,0.04) 12px
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(148,163,184,0.6);
+    }
+
+    /* FOOTER */
+    .slide-footer {
+      min-height: 12%;
+      border-radius: 18px;
+      background: rgba(24,160,251,0.06);
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .footer-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.18em;
+      margin-bottom: 2px;
+    }
+
+    .footer-main { font-weight: 500; color: var(--primary); }
+
+    @media(max-width:1024px){
+      body { padding: 12px; }
+      .slide { padding: 18px; }
+      .slide-body { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="slide">
+
+    <!-- HEADER -->
+    <header class="slide-header">
+      <div class="slide-title-block">
+        <div class="slide-kicker">Foundations</div>
+        <h1 class="slide-title">Two Statements We Ask the FMA to Endorse</h1>
+        <p class="slide-subtitle">
+          A SupTech pilot begins with two simple but powerful points of agreement about offshore leakage and the need
+          for better behavioural insight.
+        </p>
+      </div>
+      <div class="slide-number">03</div>
+    </header>
+
+    <!-- BODY -->
+    <section class="slide-body">
+
+      <!-- LEFT COLUMN -->
+      <div class="col">
+
+        <div class="statement-box">
+          <div class="statement-title">Statement 1</div>
+          NZ retail traders are leaking into unregulated offshore trading funnels.
+        </div>
+
+        <div class="statement-box">
+          <div class="statement-title">Statement 2</div>
+          Insight into their behaviour is required to design effective harm-reduction policy.
+        </div>
+
+        <p class="callout">
+          These statements do not create new regulation — they define a <strong>research and SupTech exploration
+          mandate</strong>. Everything else flows from agreement here.
+        </p>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="col">
+        <div class="visual-card">
+          <div class="visual-label">Visual idea</div>
+          <div class="visual-placeholder">
+            Two large checkboxes or ticked cards labelled:<br /><br />
+            ✔ NZ traders leaking offshore<br />
+            ✔ Behavioural insight required for harm reduction<br /><br />
+            Caption: “Foundation for SupTech Prototype”
+          </div>
+
+          <div class="chip-row">
+            <span class="chip">Research-first</span>
+            <span class="chip">No new rules</span>
+            <span class="chip">SupTech alignment</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="slide-footer">
+      <div>
+        <div class="footer-label">Key takeaway</div>
+        <div class="footer-main">
+          Agreement on these two statements unlocks a safe, evidence-driven SupTech pilot with Cambridge and Pilot.
+        </div>
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>
