@@ -67,11 +67,10 @@ function CustomTooltip({
 export function RiskFactorPanel() {
   const [hoveredFactor, setHoveredFactor] = useState<string | null>(null);
 
-  // Prepare chart data
+  // Prepare chart data - use full names now that we have more space
   const chartData = CURRENT_RISK_FACTORS.map((f) => ({
     ...f,
-    // For horizontal bar chart display
-    displayName: f.name.length > 20 ? f.name.substring(0, 18) + "..." : f.name,
+    displayName: f.name,
   }));
 
   return (
@@ -113,7 +112,7 @@ export function RiskFactorPanel() {
               <BarChart
                 data={chartData}
                 layout="vertical"
-                margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
+                margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
               >
                 <XAxis
                   type="number"
@@ -128,7 +127,7 @@ export function RiskFactorPanel() {
                   tick={{ fill: "#aebbd4", fontSize: 11 }}
                   tickLine={false}
                   axisLine={{ stroke: "rgba(124, 141, 173, 0.3)" }}
-                  width={95}
+                  width={155}
                 />
                 <RechartsTooltip content={<CustomTooltip />} />
                 <Bar

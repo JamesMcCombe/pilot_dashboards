@@ -58,18 +58,19 @@ function KPICard({ label, value, subtext, severity = "neutral", index }: KPICard
 
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.4, ease: "easeOut" }}
     >
       <Card
-        className={`rounded-3xl border-2 ${colors.border} ${colors.bg} shadow-none transition-transform duration-200 hover:-translate-y-1`}
+        className={`h-full rounded-3xl border-2 ${colors.border} ${colors.bg} shadow-none transition-transform duration-200 hover:-translate-y-1`}
       >
-        <CardContent className="p-5">
+        <CardContent className="flex h-full flex-col p-5">
           <p className="text-sm text-muted-foreground">{label}</p>
           <p className={`mt-2 text-3xl font-bold ${colors.text}`}>{value}</p>
           {subtext && (
-            <p className="mt-1 text-xs text-muted-foreground">{subtext}</p>
+            <p className="mt-auto pt-1 text-xs text-muted-foreground">{subtext}</p>
           )}
         </CardContent>
       </Card>

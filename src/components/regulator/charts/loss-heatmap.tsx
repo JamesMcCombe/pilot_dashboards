@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   lossClusteringData,
@@ -32,6 +33,8 @@ export function LossHeatmap() {
     timeSlot: string;
     loss: number;
     isCoordinated: boolean;
+    x: number;
+    y: number;
   } | null>(null);
 
   // Build a map for quick lookup
@@ -93,29 +96,69 @@ export function LossHeatmap() {
                     {traderId}
                   </div>
                   <div className="flex flex-1 gap-px">
-                    {timeSlots.map((slot) => {
+                    {timeSlots.map((slot, slotIndex) => {
                       const cell = cellMap.get(`${traderId}-${slot}`);
                       const loss = cell?.loss ?? 0;
                       const isCoordinated = cell?.isCoordinated ?? false;
+                      const hasLoss = loss > 0;
+
+                      // Stagger animation delay based on position for sparkle effect
+                      // Use deterministic seed to avoid hydration mismatch
+                      const seed = (slotIndex * 7 + traderId.charCodeAt(4)) % 30;
+                      const animationDelay = hasLoss ? seed * 0.1 : 0;
 
                       return (
-                        <div
+                        <motion.div
                           key={`${traderId}-${slot}`}
-                          className="relative h-4 flex-1 cursor-pointer rounded-[2px] transition-transform hover:z-10 hover:scale-150"
+                          className="relative h-4 flex-1 cursor-pointer rounded-[2px] hover:z-10 hover:scale-150"
                           style={{
                             backgroundColor: getLossColor(loss, isCoordinated),
                             minWidth: "4px",
                           }}
-                          onMouseEnter={() =>
-                            loss > 0 &&
-                            setHoveredCell({ traderId, timeSlot: slot, loss, isCoordinated })
-                          }
+                          animate={hasLoss ? {
+                            opacity: [0.5, 1, 0.5],
+                            scale: [1, 1.1, 1],
+                          } : undefined}
+                          transition={hasLoss ? {
+                            duration: isCoordinated ? 1.2 : 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: animationDelay,
+                          } : undefined}
+                          onMouseEnter={(e) => {
+                            if (loss > 0) {
+                              const rect = e.currentTarget.getBoundingClientRect();
+                              setHoveredCell({ 
+                                traderId, 
+                                timeSlot: slot, 
+                                loss, 
+                                isCoordinated,
+                                x: rect.left + rect.width / 2,
+                                y: rect.top,
+                              });
+                            }
+                          }}
                           onMouseLeave={() => setHoveredCell(null)}
                         >
                           {isCoordinated && (
-                            <div className="absolute inset-0 rounded-[2px] ring-1 ring-[#f87171]" />
+                            <motion.div 
+                              className="absolute inset-0 rounded-[2px] ring-1 ring-[#f87171]"
+                              animate={{
+                                boxShadow: [
+                                  "0 0 0px rgba(248, 113, 113, 0)",
+                                  "0 0 8px rgba(248, 113, 113, 0.8)",
+                                  "0 0 0px rgba(248, 113, 113, 0)",
+                                ],
+                              }}
+                              transition={{
+                                duration: 1.2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: animationDelay,
+                              }}
+                            />
                           )}
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
@@ -125,7 +168,13 @@ export function LossHeatmap() {
 
             {/* Tooltip */}
             {hoveredCell && (
-              <div className="fixed right-8 top-1/2 z-50 -translate-y-1/2 rounded-lg border border-border bg-popover p-3 text-xs shadow-xl">
+              <div 
+                className="fixed z-50 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-popover p-3 text-xs shadow-xl pointer-events-none"
+                style={{
+                  left: hoveredCell.x,
+                  top: hoveredCell.y - 8,
+                }}
+              >
                 <p className="font-medium">{hoveredCell.traderId}</p>
                 <p className="text-muted-foreground">{hoveredCell.timeSlot}</p>
                 <p className="mt-1 text-[#f87171] font-semibold">
@@ -134,11 +183,13 @@ export function LossHeatmap() {
                 {hoveredCell.isCoordinated && (
                   <p className="mt-1 text-[#f87171]">⚠ Coordinated Event</p>
                 )}
+                {/* Arrow */}
+                <div className="absolute left-1/2 -bottom-1.5 -translate-x-1/2 border-4 border-transparent border-t-popover" />
               </div>
             )}
 
             {/* Legend */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-xs">
+            <div className="mt-6 mb-4 flex flex-wrap items-center justify-center gap-6 text-xs">
               <div className="flex items-center gap-2">
                 <div className="flex gap-0.5">
                   <div

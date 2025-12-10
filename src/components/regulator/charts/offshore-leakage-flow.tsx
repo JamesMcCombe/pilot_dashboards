@@ -157,8 +157,8 @@ export function OffshoreLeakageFlow({
         {/* Sankey-style Flow Visualization */}
         <div className="relative grid grid-cols-[auto_1fr_auto] items-stretch gap-0 py-4">
           {/* Source Node */}
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex h-56 w-24 flex-col items-center justify-center rounded-2xl border-2 border-primary/40 bg-primary/10">
+          <div className="flex flex-col items-center justify-center py-2">
+            <div className="flex h-72 w-24 flex-col items-center justify-center rounded-2xl border-2 border-primary/40 bg-primary/10">
               <div className="text-center">
                 <p className="text-[10px] text-muted-foreground">Source</p>
                 <p className="mt-1 text-xs font-semibold text-primary">NZ Retail</p>
@@ -169,8 +169,8 @@ export function OffshoreLeakageFlow({
           </div>
 
           {/* Center Panel - Full Width Info */}
-          <div className="relative flex min-w-0">
-            <div className="flex h-56 w-full flex-col rounded-2xl border border-border/40 bg-muted/10 p-4">
+          <div className="relative flex min-w-0 py-2">
+            <div className="flex h-72 w-full flex-col rounded-2xl border border-border/40 bg-muted/10 p-4">
               {/* Toggle Pills */}
               <div className="mb-3 flex gap-1 rounded-xl bg-muted/30 p-1">
                 {sourcePanelViews.map((view) => (
@@ -332,7 +332,7 @@ export function OffshoreLeakageFlow({
           </div>
 
           {/* Destination Nodes */}
-          <div className="flex h-56 flex-col justify-center gap-1">
+          <div className="flex h-72 flex-col justify-center gap-1.5 py-2">
             {offshoreLeakageDestinations.map((dest) => {
               const isHovered = hoveredDestination === dest.id;
               const isHighlighted = highlightedCategory === null || highlightedCategory === dest.id;

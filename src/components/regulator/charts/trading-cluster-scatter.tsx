@@ -26,6 +26,63 @@ const clusterColors: Record<string, string> = {
   none: "#6ea8ff",
 };
 
+const clusterNames: Record<string, string> = {
+  "cluster-a": "Cluster A (EURUSD)",
+  "cluster-b": "Cluster B (XAUUSD)",
+  "cluster-c": "Cluster C (GBPJPY)",
+  none: "Individual Trade",
+};
+
+interface TooltipPayload {
+  payload: {
+    traderId: string;
+    instrument: string;
+    timestamp: string;
+    clusterId: string;
+  };
+}
+
+function CustomTooltip({ active, payload }: { active?: boolean; payload?: TooltipPayload[] }) {
+  if (!active || !payload || !payload[0]) return null;
+
+  const data = payload[0].payload;
+  const time = new Date(data.timestamp).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const date = new Date(data.timestamp).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+
+  return (
+    <div className="rounded-xl border border-border bg-popover p-3 shadow-lg">
+      <p className="font-semibold" style={{ color: clusterColors[data.clusterId] || "#6ea8ff" }}>
+        {clusterNames[data.clusterId] || "Unknown Cluster"}
+      </p>
+      <div className="mt-2 space-y-1 text-xs">
+        <div className="flex justify-between gap-4">
+          <span className="text-muted-foreground">Trader:</span>
+          <span className="font-medium">{data.traderId}</span>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span className="text-muted-foreground">Instrument:</span>
+          <span className="font-medium">{data.instrument}</span>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span className="text-muted-foreground">Time:</span>
+          <span className="font-medium">{time}</span>
+        </div>
+        <div className="flex justify-between gap-4">
+          <span className="text-muted-foreground">Date:</span>
+          <span className="font-medium">{date}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TradingClusterScatter() {
   const chartData = useMemo(() => {
     // Group by cluster
@@ -46,6 +103,7 @@ export function TradingClusterScatter() {
         traderId: e.traderId,
         instrument: e.instrument,
         timestamp: e.timestamp,
+        clusterId: e.clusterId,
       })),
     }));
   }, []);
@@ -106,13 +164,7 @@ export function TradingClusterScatter() {
                 }}
               />
               <ZAxis range={[60, 120]} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#0f1d36",
-                  border: "1px solid rgba(124, 141, 173, 0.3)",
-                  borderRadius: "12px",
-                }}
-              />
+              <Tooltip content={<CustomTooltip />} />
               <Legend
                 verticalAlign="top"
                 height={36}
